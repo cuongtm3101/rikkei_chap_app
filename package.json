@@ -17,6 +17,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "firebase": "^9.9.4"
+    "firebase": "^9.9.4",
+    "sweetalert": "^2.1.2"
   }
 }

@@ -6,7 +6,30 @@ import {
   validateLoginInfo,
   validateRegisterInfo,
   validateResetEmail,
+  validateChatForm,
 } from "../controller/index";
+
+import { authUser } from "../model/index";
+
+import swal from "sweetalert";
+
+export let alertSuccess = (message) => {
+  return swal({
+    title: "Thành công",
+    text: message,
+    icon: "success",
+    button: "Ok",
+  });
+};
+
+export let loading = (state) => {
+  let loading = document.querySelector(".loading");
+  if (state) {
+    loading.classList.add("showLoading");
+  } else {
+    loading.classList.remove("showLoading");
+  }
+};
 
 export let setMessage = (elementId, message = "") => {
   document.getElementById(elementId).innerText = message;
@@ -108,46 +131,27 @@ export let setActiveScreen = (screenName) => {
       // mount chat screen
       document.getElementById("app").innerHTML = chatPage;
 
-      // add message form listener
-      const messageForm = document.getElementById("message-form");
-      messageForm.addEventListener("submit", (e) => {
+      let chatForm = document.getElementById("message-form");
+      // chatForm.onsubmit = function() {
+      //   // sự kiện được trigger
+      // }
+
+      chatForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const newMessage = messageForm.message.value;
-        controller.addMessage(newMessage);
+        // let message = {
+        //   user: authUser.email,
+        //   content: chatForm.message.value,
+        //   createdAt: new Date().toISOString(),
+        // };
+        // console.log(authUser.email);
 
-        messageForm.message.value = "";
+        // addMessage(message);
+        validateChatForm(chatForm.message.value);
+
+        console.log(chatForm.message.value);
+        chatForm.message.value = "";
       });
-
-      // add member form listener
-      const addMemberForm = document.getElementById("add-member-form");
-      addMemberForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const newMemberEmail = addMemberForm.memberEmail.value;
-        controller.addMember({
-          newMember: newMemberEmail,
-        });
-
-        addMemberForm.memberEmail.value = "";
-      });
-
-      // create conversation listener
-      document
-        .getElementById("create-conversation")
-        .addEventListener("click", () =>
-          view.setActiveScreen("createConversation")
-        );
-
-      // remove notification
-      document
-        .getElementById("message-input")
-        .addEventListener("click", () =>
-          view.removeNotification(model.activeConversation.id)
-        );
-
-      // load conversations
-      model.loadConversations();
       break;
   }
 };
@@ -158,6 +162,36 @@ export let renderErrorMessage = (id, text) => {
     errorMessage.innerText = text;
     console.log("Hllo world");
   }
+};
+
+export let addMessage = (messageObject) => {
+  const messageContainer = document.createElement("div");
+  messageContainer.classList.add("message-item");
+
+  const message = document.createElement("div");
+  message.classList.add("message-content");
+  message.innerText = messageObject.content;
+
+  // `<div class="message-item my-message">
+  //   <div class="message-content"></div>
+  // </div>`
+  // `<div class="message-item other-message">
+  //   <div class="sender">Tranminhcuong95@gmail.com</div>
+  //   <div class="message-content"></div>
+  // </div>`;
+
+  if (messageObject.user === authUser.email) {
+    messageContainer.classList.add("my-message");
+  } else {
+    messageContainer.classList.add("other-message");
+    const sender = document.createElement("div");
+    sender.classList.add("sender");
+    sender.innerText = messageObject.user;
+    messageContainer.appendChild(sender);
+  }
+
+  messageContainer.appendChild(message);
+  document.getElementById("message-container").appendChild(messageContainer);
 };
 
 // Git status (Kiẻm tra trạng thái của file)

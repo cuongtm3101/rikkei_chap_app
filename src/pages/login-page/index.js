@@ -1,9 +1,11 @@
 import "./style.css";
 export let loginPage = /*html*/ `
     <div id="login-screen">
+        <img src="../../../public/img/spinner-trans.gif" alt="" class="loading" />
         <div id="login-form-container">
             <img class="logo" src="../../public/img/logo.svg" alt="logo">
             <h2 class="header">Sign in to Rikkei Chat</h2>
+            <div class="error" id="server-error-message"></div>
             <form id="login-form">
                 <div class="form-first-part">
                     <div class="title">Email address</div>

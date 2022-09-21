@@ -1,6 +1,8 @@
 import "./style.css";
 export let registerPage = /*html*/ `
     <div id="login-screen">
+
+    <img src="../../../public/img/spinner-trans.gif" alt="" class="loading" />
         <div id="login-form-container">
             <img class="logo" src="../../public/img/logo.svg" alt="logo">
             <h2 class="header">Create new account</h2>

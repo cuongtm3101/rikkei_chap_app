@@ -1,5 +1,11 @@
 import { renderErrorMessage } from "../view/index";
-import { createNewUser, loginUser } from "../model/index";
+import {
+  createNewUser,
+  loginUser,
+  resetPassword,
+  authUser,
+  saveMessage,
+} from "../model/index";
 export let validateLoginInfo = (email, password) => {
   // regex, regular expression
   // email regex
@@ -87,8 +93,19 @@ export let validateResetEmail = (email) => {
     renderErrorMessage("email-error-message", "");
   }
 
-  //   if (email) {
-  //     model.resetPassword(email);
-  //   }
+  if (email) {
+    resetPassword(email);
+  }
 };
-export * from "./index";
+
+export let validateChatForm = (content) => {
+  if (content) {
+    let message = {
+      username: authUser.email,
+      content: content,
+      createdAt: new Date().toISOString(),
+    };
+
+    saveMessage(message);
+  }
+};
